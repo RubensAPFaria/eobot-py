@@ -1,16 +1,6 @@
 Eobot
 =====
 
-[![Build Status](https://travis-ci.org/rickdenhaan/eobot-py.png?branch=master)](https://travis-ci.org/rickdenhaan/eobot-py)
-
-    >>> import eobot
-    >>> account_john = eobot.get_config('John')
-    >>> account_john.configure(email='john@example.com', token='1234')
-    >>> account_mary = eobot.get_config('Mary')
-    >>> account_mary.configure(email='mary@example.com', token='5678')
-    >>> mary_btc_wallet = eobot.get_deposit_address("BTC", config=account_mary)
-    >>> eobot.manual_withdraw("BTC", 1.5, mary_btc_wallet, config=account_john)
-
 Configuration
 -------------
 
