@@ -1,5 +1,5 @@
-from eobot_errors import NoUserIdError, NoEmailError, NoPasswordOrTokenError
-from eobot_authentication import EobotWriteAuthentication, EobotReadonlyAuthentication
+from .eobot_errors import NoUserIdError, NoEmailError, NoPasswordOrTokenError
+from .eobot_authentication import EobotWriteAuthentication, EobotReadonlyAuthentication
 
 # used as default values in EobotConfig.configure() because None is actually a valid value and will drop current values,
 # which is unwanted if named arguments are not provided
