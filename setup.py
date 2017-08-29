@@ -22,7 +22,7 @@ setup(
     description='Eobot API wrapper',
     long_description=readme(),
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: Freeware',
         'Programming Language :: Python :: 2.7',
