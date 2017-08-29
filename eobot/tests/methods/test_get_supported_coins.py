@@ -4,6 +4,13 @@ from eobot.methods.get_supported_coins import perform_request
 from eobot.lib.eobot_request import EobotRequest
 from eobot.tests.mock_server import MockServer
 
+try:
+    # noinspection PyShadowingBuiltins
+    basestring = basestring
+except NameError:
+    # noinspection PyShadowingBuiltins
+    basestring = (str, bytes)
+
 
 class GetSupportedCoinsTest(unittest.TestCase):
     def setUp(self):

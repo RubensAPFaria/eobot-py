@@ -1,8 +1,18 @@
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import json
 import socket
 from threading import Thread
-from urlparse import urlparse, parse_qs
+
+try:
+    # noinspection PyUnresolvedReferences
+    from urllib.parse import urlparse, parse_qs
+except ImportError:
+    from urlparse import urlparse, parse_qs
+
+try:
+    # noinspection PyUnresolvedReferences
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+except ImportError:
+    from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 
 mock_state = {
@@ -114,7 +124,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         else:
             self.send_response(404)
             self.end_headers()
-            self.wfile.write("Page not found")
+            self.wfile.write("Page not found".encode())
 
     def do_exchange_coins(self, parameters):
         from_coin = parameters["convertfrom"]
@@ -141,7 +151,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
 
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(json.dumps("OK"))
+        self.wfile.write(json.dumps("OK").encode())
 
     def do_get_balances(self, parameters):
         account_id = parameters["total"]
@@ -159,7 +169,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps(balances))
+        self.wfile.write(json.dumps(balances).encode())
 
     def do_get_coin_value_or_exchange_rate(self, parameters):
         coin = parameters["coin"]
@@ -170,12 +180,12 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps({coin: mock_state["coins"][coin]["Price"]}))
+            self.wfile.write(json.dumps({coin: mock_state["coins"][coin]["Price"]}).encode())
         else:
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps({coin: mock_state["fiat"][coin]["Price"]}))
+            self.wfile.write(json.dumps({coin: mock_state["fiat"][coin]["Price"]}).encode())
 
     def do_get_deposit_address(self, parameters):
         account_id = parameters["id"]
@@ -191,7 +201,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps({coin: wallet}))
+        self.wfile.write(json.dumps({coin: wallet}).encode())
 
     def do_get_exchange_estimate(self, parameters):
         from_coin = parameters["convertfrom"]
@@ -219,7 +229,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps({"Result": estimate}))
+        self.wfile.write(json.dumps({"Result": estimate}).encode())
 
     def do_get_mining_mode(self, parameters):
         account_id = parameters["idmining"]
@@ -231,7 +241,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps({"mining": mode}))
+        self.wfile.write(json.dumps({"mining": mode}).encode())
 
     def do_get_mining_speed(self, parameters):
         account_id = parameters["idspeed"]
@@ -241,7 +251,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps(mock_state["accounts"][account_id]["speed"]))
+        self.wfile.write(json.dumps(mock_state["accounts"][account_id]["speed"]).encode())
 
     def do_get_mining_estimates(self, parameters):
         account_id = parameters["idestimates"]
@@ -258,19 +268,19 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps(estimates))
+        self.wfile.write(json.dumps(estimates).encode())
 
     def do_get_supported_coins(self):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps(mock_state["coins"]))
+        self.wfile.write(json.dumps(mock_state["coins"]).encode())
 
     def do_get_supported_fiat(self):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps(mock_state["fiat"]))
+        self.wfile.write(json.dumps(mock_state["fiat"]).encode())
 
     def do_manual_withdraw(self, parameters):
         coin = parameters["manualwithdraw"]
@@ -290,13 +300,13 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
 
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(json.dumps("OK"))
+        self.wfile.write(json.dumps("OK").encode())
 
     def do_set_automatic_withdraw(self):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps("OK"))
+        self.wfile.write(json.dumps("OK").encode())
 
     def do_set_mining_mode(self, parameters):
         account_id = parameters["id"]
@@ -312,7 +322,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps("OK"))
+        self.wfile.write(json.dumps("OK").encode())
 
     def do_get_user_id(self, parameters):
         email = parameters["email"]
@@ -334,7 +344,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
-        self.wfile.write(json.dumps({"userid": user_id}))
+        self.wfile.write(json.dumps({"userid": user_id}).encode())
 
 
 # noinspection PyTypeChecker
@@ -376,6 +386,7 @@ class MockServer(object):
 
     def stop(self):
         self.server.shutdown()
+        self.server.server_close()
         self.server = None
         self.thread = None
         self.port = 0

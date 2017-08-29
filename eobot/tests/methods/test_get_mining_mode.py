@@ -5,6 +5,13 @@ from eobot.lib.eobot_config import get_config
 from eobot.lib.eobot_request import EobotRequest
 from eobot.tests.mock_server import MockServer
 
+try:
+    # noinspection PyShadowingBuiltins
+    basestring = basestring
+except NameError:
+    # noinspection PyShadowingBuiltins
+    basestring = (str, bytes)
+
 
 class GetMiningModeTest(unittest.TestCase):
     def setUp(self):

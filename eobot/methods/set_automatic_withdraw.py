@@ -1,7 +1,7 @@
 from ..lib.eobot_config import EobotConfig, get_config
 from ..lib.eobot_errors import NoUserIdError
 from ..lib.eobot_request import EobotRequest
-import get_user_id
+from .get_user_id import perform_request as get_user_id
 
 
 def perform_request(coin, on_amount, wallet_address, config=None, request=None):
@@ -49,7 +49,7 @@ def perform_request(coin, on_amount, wallet_address, config=None, request=None):
     try:
         config.get_authentication(True)
     except NoUserIdError:
-        config.set_user_id(get_user_id.perform_request(config=config, request=request.clone()))
+        config.set_user_id(get_user_id(config=config, request=request.clone()))
 
     auth = config.get_authentication(False)
 

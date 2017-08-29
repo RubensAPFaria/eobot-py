@@ -1,8 +1,8 @@
 from ..lib.eobot_config import EobotConfig, get_config
 from ..lib.eobot_errors import NoUserIdError
 from ..lib.eobot_request import EobotRequest
-import get_user_id
-import get_mining_mode
+from .get_user_id import perform_request as get_user_id
+from .get_mining_mode import perform_request as get_mining_mode
 
 
 def perform_request(mode, config=None, request=None):
@@ -38,11 +38,11 @@ def perform_request(mode, config=None, request=None):
     try:
         config.get_authentication(True)
     except NoUserIdError:
-        config.set_user_id(get_user_id.perform_request(config=config, request=request.clone()))
+        config.set_user_id(get_user_id(config=config, request=request.clone()))
 
     auth = config.get_authentication(False)
 
-    current_mode = get_mining_mode.perform_request(config=config, request=request.clone())
+    current_mode = get_mining_mode(config=config, request=request.clone())
     if current_mode == mode:
         return True
 
@@ -52,5 +52,5 @@ def perform_request(mode, config=None, request=None):
     request.set_parameter("mining", mode)
     request.perform_request()
 
-    new_mode = get_mining_mode.perform_request(config=config, request=request.clone())
+    new_mode = get_mining_mode(config=config, request=request.clone())
     return new_mode == mode

@@ -1,8 +1,8 @@
 from ..lib.eobot_config import EobotConfig, get_config
 from ..lib.eobot_errors import NoUserIdError
 from ..lib.eobot_request import EobotRequest
-import get_balances
-import get_user_id
+from .get_balances import perform_request as get_balances
+from .get_user_id import perform_request as get_user_id
 
 
 def perform_request(coin, amount, wallet_address, config=None, request=None):
@@ -50,11 +50,11 @@ def perform_request(coin, amount, wallet_address, config=None, request=None):
     try:
         config.get_authentication(True)
     except NoUserIdError:
-        config.set_user_id(get_user_id.perform_request(config=config, request=request.clone()))
+        config.set_user_id(get_user_id(config=config, request=request.clone()))
 
     auth = config.get_authentication(False)
 
-    old_balances = get_balances.perform_request(config=config, request=request.clone())
+    old_balances = get_balances(config=config, request=request.clone())
     old_balance = old_balances[coin] if coin in old_balances.keys() else 0.0
 
     request.set_parameter("id", auth.user_id)
@@ -65,7 +65,7 @@ def perform_request(coin, amount, wallet_address, config=None, request=None):
     request.set_parameter("wallet", wallet_address)
     request.perform_request()
 
-    new_balances = get_balances.perform_request(config=config, request=request.clone())
+    new_balances = get_balances(config=config, request=request.clone())
     new_balance = new_balances[coin] if coin in new_balances.keys() else 0.0
 
     return new_balance < old_balance
